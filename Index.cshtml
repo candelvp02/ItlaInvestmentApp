@@ -1,33 +1,55 @@
-﻿@model LoginViewModel
+﻿@using InvestmentApp.Core.Application.ViewModels.AssetType
+@model List<UserViewModel>;
 @{
-    ViewData["Title"] = "Login Page";
-    Layout = "_LayoutAnonymous";
+    ViewData["Title"] = "Users";
 }
 
-<div class="d-flex justify-content-center">
-
-    <div class="col-12 col-md-4">
-        <div class="card">
-            <div class="card-header bg-success text-light"><h5 class="text-center">Login user</h5></div>
-            <div class="card-body">
-                @Html.ValidationSummary(false,"",new {@class = "text-danger"})
-                <form asp-controller="Login" asp-action="Index" method="POST">
-                    <div class="mb-3">
-                        <label asp-for="UserName" class="form-label">UserName:</label>
-                        <input class="form-control" asp-for="UserName" />                   
-                    </div>
-                    <div class="mb-3">
-                        <label asp-for="Password" class="form-label">Password:</label>
-                        <input class="form-control" asp-for="Password" />                    
-                    </div>
-                    
-                    <div>
-                        <button type="submit" class="btn btn-outline-primary float-end"><i class="bi bi-door-open"></i> Login</button>
-                        <a asp-controller="Login" asp-action="register" class="btn btn-outline-info float-end me-2"><i class="bi bi-person-add"></i> Register</a>
-                    </div>
-                </form>
-            </div>
-        </div>
+<div class="row">
+    <div class="text-center">
+        <h1 class="display-4">Users</h1>
     </div>
-    
 </div>
+
+<div class="row mt-4">
+    <div class="col-12 col-md-3">
+        <a class="btn btn-outline-success" asp-controller="User" asp-action="Create"><i class="bi bi-file-earmark-plus"></i> New user</a>
+    </div>
+
+</div>
+
+<div class="row mt-2">
+    @if (Model.Count == 0)
+    {
+        <div class="text-center">
+            <h4 class="display-4">There aren't users</h4>
+        </div>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <div class="col-12 col-md-3">
+                <div class="card">
+                    <img src="@item.ProfileImage" class="card-img-top responsive-image" alt="@item.Name">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name @item.LastName</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Phone: @item.Phone</li>
+                        <li class="list-group-item">Email: @item.Email</li>
+                        <li class="list-group-item">userName: @item.UserName</li>
+                        <li class="list-group-item">Role: @(item.Role == 1 ? "Admin" : "Investor")</li>
+                    </ul>
+                    <div class="card-body">
+                        <a class="btn btn-outline-warning float-end" asp-controller="User" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i> Edit</a>
+                        <a class="btn btn-outline-danger float-end me-2" asp-controller="User" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i> Delete</a>
+                        
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+
+
